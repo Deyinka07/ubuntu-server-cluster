@@ -1,0 +1,29 @@
+{
+  "name": "Ubuntu Server",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "overrideCommand": true,
+  "remoteUser": "vscode",
+  "features": {
+    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
+      "version": "latest",
+      "helm": "none",
+      "minikube": "none"
+    }
+  },
+  "runArgs": [
+    "--network=host"
+  ],
+  "mounts": [
+    "source=/home/saltech/.kube,target=/home/vscode/.kube,type=bind,consistency=cached"
+  ],
+  "settings": {
+    "terminal.integrated.defaultProfile.linux": "zsh",
+    "terminal.integrated.profiles.linux": {
+      "zsh": {
+        "path": "/bin/zsh"
+      }
+    }
+  }
+}
