@@ -51,4 +51,13 @@ RUN echo '' >> /home/vscode/.zshrc \
     && echo 'fi' >> /home/vscode/.zshrc \
     && echo 'compdef _kubectl k' >> /home/vscode/.zshrc
 
+# --- Enable kubectl autocomplete for BASH (permanent, safe) ---
+USER vscode
+RUN sudo apt-get update && sudo apt-get install -y bash-completion && \
+    mkdir -p /etc/bash_completion.d && \
+    kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl >/dev/null && \
+    { grep -qxF 'source /etc/bash_completion.d/kubectl' /home/vscode/.bashrc || echo 'source /etc/bash_completion.d/kubectl' >> /home/vscode/.bashrc; } && \
+    { grep -qxF 'alias k=kubectl' /home/vscode/.bashrc || echo 'alias k=kubectl' >> /home/vscode/.bashrc; }
+USER root
+
 USER root
