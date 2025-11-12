@@ -5,7 +5,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: saltech-svc.saltechng.com
+    - host: linkding.saltechng.com
       http:
         paths:
           - backend:
