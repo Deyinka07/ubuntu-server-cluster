@@ -58,6 +58,18 @@ RUN sudo apt-get update && sudo apt-get install -y bash-completion && \
     kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl >/dev/null && \
     { grep -qxF 'source /etc/bash_completion.d/kubectl' /home/vscode/.bashrc || echo 'source /etc/bash_completion.d/kubectl' >> /home/vscode/.bashrc; } && \
     { grep -qxF 'alias k=kubectl' /home/vscode/.bashrc || echo 'alias k=kubectl' >> /home/vscode/.bashrc; }
+
+# Install dnsutils (for nslookup), git, and build-essential
+RUN sudo apt-get update && sudo apt-get install -y \
+    dnsutils \
+    git \
+    build-essential
+
+# Install dnsutils (for nslookup), git, and build-essential
+RUN sudo apt-get update && sudo apt-get install -y \
+    dnsutils \
+    git \
+    build-essential
 USER root
 
 USER root

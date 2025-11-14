@@ -3,21 +3,41 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
-  "overrideCommand": true,
   "remoteUser": "vscode",
+  
   "features": {
+    // This installs kubectl, Helm, etc.
     "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
       "version": "latest",
       "helm": "none",
       "minikube": "none"
+    },
+    
+    // THIS IS THE FIX:
+    // This feature automatically:
+    // 1. Mounts the host's /var/run/docker.sock
+    // 2. Fixes all permissions so the 'vscode' user can use it
+    "ghcr.io/devcontainers/features/docker-from-docker:1": {
+      "version": "latest",
+      "enableNonRootDocker": true
     }
   },
-  "runArgs": [
-    "--network=host"
-  ],
+
+  // This mounts your host's .kube folder, just like before
   "mounts": [
     "source=/home/saltech/.kube,target=/home/vscode/.kube,type=bind,consistency=cached"
   ],
+
+  // This command runs *after* the container is built
+  "postCreateCommand": "bash -c '\
+    echo \"==> Installing k3d...\" && \
+    curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash && \
+    echo \"==> Installing Flux...\" && \
+    curl -s https://fluxcd.io/install.sh | sudo bash && \
+    echo \"==> (Optional) Updating nvim treesitter...\" && \
+    (nvim --headless +TSUpdate +qall || echo \"Nvim treesitter update failed, ignoring.\")'",
+
+  // Your original settings
   "settings": {
     "terminal.integrated.defaultProfile.linux": "zsh",
     "terminal.integrated.profiles.linux": {
